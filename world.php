@@ -38,7 +38,7 @@ class World {
     }
   }
 
-  function validate_action($a, $b){
+  function validate_action($a, $b, $subcmd){
     if($a == $b){
       return false;
     }
@@ -46,6 +46,9 @@ class World {
       return false;
     }
     if($b < 0 || $b > count($this->col)-1){
+      return false;
+    }
+    if($subcmd != 'onto' && $subcmd != 'over'){
       return false;
     }
     return true;
@@ -64,7 +67,7 @@ class World {
     $this->move($a,$b,'over');
   }
   function move($a,$b,$subcmd){
-    if($this->validate_action($a,$b) == false){
+    if($this->validate_action($a,$b,$subcmd) == false){
       return;
     }
     $col_for_a = $this->find($a);
@@ -87,7 +90,7 @@ class World {
     $this->pile($a,$b,'over');
   }
   function pile($a,$b,$subcmd){
-    if($this->validate_action($a,$b) == false){
+    if($this->validate_action($a,$b,$subcmd) == false){
       return;
     }
     $col_for_a = $this->find($a);

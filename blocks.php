@@ -23,24 +23,10 @@ while($cmd != 'quit'){
 
     switch($cmd){
       case 'move':
-        switch($subcmd) {
-          case 'onto':
-            $world->move_onto($a,$b);
-            break;
-          case 'over':
-            $world->move_over($a,$b);
-            break;
-        }
+        $world->move($a,$b,$subcmd);
         break;
       case 'pile':
-        switch($subcmd){
-          case 'onto':
-            $world->pile_onto($a,$b);
-            break;
-          case 'over':
-            $world->pile_over($a,$b);
-            break;
-        }
+        $world->pile($a,$b,$subcmd);
         break;
     }
   }
