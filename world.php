@@ -58,22 +58,12 @@ class World {
   }
 
   function move_onto($a,$b){
-    if($this->validate_action($a,$b) == false){
-      return;
-    }
-    $col_for_a = $this->find($a);
-    $col_for_b = $this->find($b);
-    if($this->validation_columns($col_for_a,$col_for_b) == false){
-      return;
-    }
-
-    $this->reinit($col_for_a, $a);
-    $this->reinit($col_for_b, $b);
-
-    array_pop($this->col[$col_for_a]);
-    $this->col[$col_for_b][] = $a;
+    $this->move($a,$b,'onto');
   }
   function move_over($a,$b){
+    $this->move($a,$b,'over');
+  }
+  function move($a,$b,$subcmd){
     if($this->validate_action($a,$b) == false){
       return;
     }
@@ -84,27 +74,19 @@ class World {
     }
 
     $this->reinit($col_for_a, $a);
-
+    if($subcmd == 'onto'){
+      $this->reinit($col_for_b, $b);
+    }
     array_pop($this->col[$col_for_a]);
     $this->col[$col_for_b][] = $a;
   }
   function pile_onto($a,$b){
-    if($this->validate_action($a,$b) == false){
-      return;
-    }
-    $col_for_a = $this->find($a);
-    $col_for_b = $this->find($b);
-    if($this->validation_columns($col_for_a,$col_for_b) == false){
-      return;
-    }
-
-    $pos = array_search($a, $this->col[$col_for_a]);
-    $a_stack = array_splice($this->col[$col_for_a], $pos);
-
-    $this->reinit($col_for_b, $b);
-    $this->col[$col_for_b] = array_merge($this->col[$col_for_b], $a_stack);
+    $this->pile($a,$b,'onto');
   }
   function pile_over($a,$b){
+    $this->pile($a,$b,'over');
+  }
+  function pile($a,$b,$subcmd){
     if($this->validate_action($a,$b) == false){
       return;
     }
@@ -116,7 +98,9 @@ class World {
 
     $pos = array_search($a, $this->col[$col_for_a]);
     $a_stack = array_splice($this->col[$col_for_a], $pos);
-
+    if($subcmd == 'onto'){
+      $this->reinit($col_for_b, $b);
+    }
     $this->col[$col_for_b] = array_merge($this->col[$col_for_b], $a_stack);
   }
 }
