@@ -60,12 +60,6 @@ class World {
     return true;
   }
 
-  function move_onto($a,$b){
-    $this->move($a,$b,'onto');
-  }
-  function move_over($a,$b){
-    $this->move($a,$b,'over');
-  }
   function move($a,$b,$subcmd){
     if($this->validate_action($a,$b,$subcmd) == false){
       return;
@@ -82,12 +76,6 @@ class World {
     }
     array_pop($this->col[$col_for_a]);
     $this->col[$col_for_b][] = $a;
-  }
-  function pile_onto($a,$b){
-    $this->pile($a,$b,'onto');
-  }
-  function pile_over($a,$b){
-    $this->pile($a,$b,'over');
   }
   function pile($a,$b,$subcmd){
     if($this->validate_action($a,$b,$subcmd) == false){
