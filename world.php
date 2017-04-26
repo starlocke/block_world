@@ -2,7 +2,8 @@
 
 class World {
   var $col;
-  function __construct($size) {
+  function __construct($size)
+  {
     if($size < 0 || $size > 25) {
       throw new Exception("Bad world size.");
     }
@@ -12,9 +13,10 @@ class World {
     }
   }
 
-  function render(){
+  function render()
+  {
     $result = '';
-    for($i = 0; $i < count($this->col); ++$i){
+    for($i = 0; $i < count($this->col); ++$i) {
       $result .= "$i: ";
       $result .= implode(' ', $this->col[$i]);
       $result .= "\n";
@@ -22,7 +24,8 @@ class World {
     return $result;
   }
 
-  function find($f){
+  function find($f)
+  {
     foreach($this->col as $k => $c){
       if(in_array($f, $c)){
         return $k;
@@ -30,7 +33,8 @@ class World {
     }
   }
 
-  function reinit(&$block){
+  protected function reinit(&$block)
+  {
     $col = $block['col'];
     $f = $block['val'];
     $pos = array_search($f, $this->col[$col]);
@@ -40,48 +44,52 @@ class World {
     }
   }
 
-  function validate_action($a, $b, $subcmd){
-    if($a == $b){
+  protected function validate_action($a, $b, $subcmd)
+  {
+    if($a == $b) {
       return false;
     }
-    if($a < 0 || $a > count($this->col)-1){
+    if($a < 0 || $a > count($this->col)-1) {
       return false;
     }
-    if($b < 0 || $b > count($this->col)-1){
+    if($b < 0 || $b > count($this->col)-1) {
       return false;
     }
-    if($subcmd != 'onto' && $subcmd != 'over'){
+    if($subcmd != 'onto' && $subcmd != 'over') {
       return false;
     }
     return true;
   }
-  function validation_columns($a, $b){
+  protected function validation_columns($a, $b)
+  {
     if($a['col'] == $b['col']){
       return false;
     }
     return true;
   }
 
-  function block($f){
+  protected function block($f)
+  {
     return ['val'=>$f, 'col'=>$this->find($f)];
   }
 
-  function take_action($cmd, $a, $subcmd, $b){
-    if($this->validate_action($a,$b,$subcmd) == false){
+  function take_action($cmd, $a, $subcmd, $b)
+  {
+    if($this->validate_action($a, $b, $subcmd) == false) {
       return;
     }
     $block_a = $this->block($a);
     $block_b = $this->block($b);
-    if($this->validation_columns($block_a,$block_b) == false){
+    if($this->validation_columns($block_a, $block_b) == false) {
       return;
     }
 
-    switch($cmd){
+    switch($cmd) {
       case 'move':
-        $this->move($block_a,$block_b,$subcmd);
+        $this->move($block_a, $block_b, $subcmd);
         break;
       case 'pile':
-        $this->pile($block_a,$block_b,$subcmd);
+        $this->pile($block_a, $block_b, $subcmd);
         break;
     }
   }
@@ -89,7 +97,7 @@ class World {
   protected function move(&$block_a, &$block_b, $subcmd)
   {
     $this->reinit($block_a);
-    if($subcmd == 'onto'){
+    if($subcmd == 'onto') {
       $this->reinit($block_b);
     }
     $this->shift($block_a, $block_b);
