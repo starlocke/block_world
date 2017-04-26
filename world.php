@@ -86,20 +86,23 @@ class World {
     }
   }
 
-  function move(&$block_a,&$block_b,$subcmd){
-    $a = $block_a['val'];
-    $col_for_a = $block_a['col'];
-    $b = $block_b['val'];
-    $col_for_b = $block_b['col'];
-
+  protected function move(&$block_a, &$block_b, $subcmd)
+  {
     $this->reinit($block_a);
     if($subcmd == 'onto'){
       $this->reinit($block_b);
     }
-    array_pop($this->col[$col_for_a]);
-    $this->col[$col_for_b][] = $a;
+    $this->shift($block_a, $block_b);
   }
-  function pile(&$block_a,&$block_b,$subcmd){
+  protected function pile(&$block_a, &$block_b, $subcmd)
+  {
+    if($subcmd == 'onto') {
+      $this->reinit($block_b);
+    }
+    $this->shift($block_a, $block_b);
+  }
+  protected function shift(&$block_a, &$block_b)
+  {
     $a = $block_a['val'];
     $col_for_a = $block_a['col'];
     $b = $block_b['val'];
@@ -107,9 +110,6 @@ class World {
 
     $pos = array_search($a, $this->col[$col_for_a]);
     $a_stack = array_splice($this->col[$col_for_a], $pos);
-    if($subcmd == 'onto'){
-      $this->reinit($block_b);
-    }
     $this->col[$col_for_b] = array_merge($this->col[$col_for_b], $a_stack);
   }
 }
