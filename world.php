@@ -38,11 +38,8 @@ class World {
     }
   }
 
-  function validate_action($a,$b){
+  function validate_action($a, $b){
     if($a == $b){
-      return false;
-    }
-    if($this->find($a) == $this->find($b)){
       return false;
     }
     if($a < 0 || $a > count($this->col)-1){
@@ -53,14 +50,22 @@ class World {
     }
     return true;
   }
+  function validation_columns($a, $b){
+    if($a == $b){
+      return false;
+    }
+    return true;
+  }
 
   function move_onto($a,$b){
     if($this->validate_action($a,$b) == false){
       return;
     }
-    //echo "move_onto $a,$b";
     $col_for_a = $this->find($a);
     $col_for_b = $this->find($b);
+    if($this->validation_columns($col_for_a,$col_for_b) == false){
+      return;
+    }
 
     $this->reinit($col_for_a, $a);
     $this->reinit($col_for_b, $b);
@@ -72,9 +77,11 @@ class World {
     if($this->validate_action($a,$b) == false){
       return;
     }
-    //echo "move_over $a,$b";
     $col_for_a = $this->find($a);
     $col_for_b = $this->find($b);
+    if($this->validation_columns($col_for_a,$col_for_b) == false){
+      return;
+    }
 
     $this->reinit($col_for_a, $a);
 
@@ -85,9 +92,11 @@ class World {
     if($this->validate_action($a,$b) == false){
       return;
     }
-    //echo "pile_onto $a,$b";
     $col_for_a = $this->find($a);
     $col_for_b = $this->find($b);
+    if($this->validation_columns($col_for_a,$col_for_b) == false){
+      return;
+    }
 
     $pos = array_search($a, $this->col[$col_for_a]);
     $a_stack = array_splice($this->col[$col_for_a], $pos);
@@ -99,9 +108,11 @@ class World {
     if($this->validate_action($a,$b) == false){
       return;
     }
-    //echo "pile_over $a,$b";
     $col_for_a = $this->find($a);
     $col_for_b = $this->find($b);
+    if($this->validation_columns($col_for_a,$col_for_b) == false){
+      return;
+    }
 
     $pos = array_search($a, $this->col[$col_for_a]);
     $a_stack = array_splice($this->col[$col_for_a], $pos);
