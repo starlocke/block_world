@@ -21,14 +21,7 @@ while($cmd != 'quit'){
     $subcmd = $tokens[2];
     $b = $tokens[3];
 
-    switch($cmd){
-      case 'move':
-        $world->move($a,$b,$subcmd);
-        break;
-      case 'pile':
-        $world->pile($a,$b,$subcmd);
-        break;
-    }
+    $world->take_action($cmd, $a, $subcmd, $b);
   }
 }
 if($world != null){
